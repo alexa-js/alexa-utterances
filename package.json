@@ -1,0 +1,26 @@
+{
+  "name": "alexa-utterances",
+  "version": "0.0.1",
+  "description": "generate expanded utterances for Amazon Alexa from a template and dictionary",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mreinstein/alexa-utterances.git"
+  },
+  "keywords": [
+    "alexa",
+    "amazon",
+    "echo",
+    "utterance",
+    "intent"
+  ],
+  "author": "Matt Kruse <github@mattkruse.com> (http://MattKruse.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mreinstein/alexa-utterances/issues"
+  },
+  "homepage": "https://github.com/mreinstein/alexa-utterances#readme"
+}
