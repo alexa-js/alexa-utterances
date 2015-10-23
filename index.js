@@ -2,43 +2,6 @@ var Combinatorics = require('js-combinatorics');
 var Numbered      = require('numbered');
 
 
-// Extract the schema and generate a schema JSON object
-function schema (intents) {
-  var schema = {"intents":[]}, intentName, intent, key;
-  for (intentName in intents) {
-    intent = intents[intentName];
-    var intentSchema = {"intent":intent.name, "slots":[]};
-    if (intent.schema) {
-      if (intent.schema.slots) {
-        for (key in intent.schema.slots) {
-          intentSchema.slots.push( {"name":key, "type":intent.schema.slots[key]} );
-        }
-      }
-    }
-    schema.intents.push(intentSchema);
-  };
-  return JSON.stringify(schema,null,3);
-}
-
-
-// Generate a list of sample utterances
-function utterances (intents, dictionary) {
-  var intentName, utterances=[], intent, out="";
-  for (intentName in intents) {
-    intent = intents[intentName];
-    if (intent.schema && intent.schema.utterances) {
-      intent.schema.utterances.forEach(function(sample) {
-        var list = generateUtterances(sample, intent.schema.slots, dictionary);
-        list.forEach(function(utterance) {
-          out+=intent.name+"\t"+(utterance.replace(/\s+/g,' '))+"\n";
-        });
-      });
-    }
-  };
-  return out;
-}
-
-
 // Util functions for generating schema and utterances
 // ===================================================
 // Convert a number range like 5-10 into an array of english words
@@ -105,3 +68,6 @@ function generateUtterances(str, slots, dictionary) {
   }
   return utterances;
 }
+
+
+module.exports = generateUtterances;

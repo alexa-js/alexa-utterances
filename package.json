@@ -1,10 +1,10 @@
 {
   "name": "alexa-utterances",
   "version": "0.0.1",
-  "description": "generate expanded utterances for Amazon Alexa from a template and dictionary",
+  "description": "generate expanded Amazon Alexa utterances from a template string",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap ./test"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,12 @@
   "bugs": {
     "url": "https://github.com/mreinstein/alexa-utterances/issues"
   },
-  "homepage": "https://github.com/mreinstein/alexa-utterances#readme"
+  "homepage": "https://github.com/mreinstein/alexa-utterances#readme",
+  "dependencies": {
+    "js-combinatorics": "^0.5.0",
+    "numbered": "^1.0.0"
+  },
+  "devDependencies": {
+    "tap": "^2.1.1"
+  }
 }
