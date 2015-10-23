@@ -4,6 +4,7 @@
   "description": "generate expanded Amazon Alexa utterances from a template string",
   "main": "index.js",
   "scripts": {
+    "prepublish": "npm test",
     "test": "tap ./test"
   },
   "repository": {

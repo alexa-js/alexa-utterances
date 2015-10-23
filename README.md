@@ -6,7 +6,19 @@ When building apps for Alexa or Echo, it's important to declare many permutation
 
 Manually generating these combinations is tedious. This module allows you to generate many (hundreds or even thousands) of sample utterances using just a few samples that get auto-expanded. Any number of sample utterances may be passed in the utterances array. Below are some sample utterances macros and what they will be expanded to.
 
-## API
+### usage
+
+installation:
+```
+npm install alexa-utterances
+```
+
+running tests:
+```
+npm test
+```
+
+### API
 
 ```javascript
 var result = utterances(template, slots, dictionary);
@@ -21,7 +33,7 @@ var result = utterances(template, slots, dictionary);
 **result** an array of strings built from the template
 
 
-### example
+#### example
 
 ```javascript
 var dictionary = { adjustments: [ 'dim', 'brighten' ] };
@@ -34,12 +46,12 @@ var result = utterances(template, slots, dictionary);
 // [ '{dim|Adjustment} the light', '{brighten|Adjustment} the light' ]
 ```
 
-### slots
+#### slots
 
 The slots object is a simple Name:Type mapping. The type must be one of Amazon's supported slot types: LITERAL, NUMBER, DATE, TIME, DURATION
 
 
-### Using a Dictionary
+#### Using a Dictionary
 
 Several intents may use the same list of possible values, so you want to define them in one place, not in each intent schema. Use the app's dictionary.
 
