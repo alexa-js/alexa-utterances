@@ -21,7 +21,7 @@ npm test
 ### API
 
 ```javascript
-var result = utterances(template, slots, dictionary);
+var result = utterances(template, slots, dictionary, exhaustiveUtterances);
 ```
 
 **template** a string to generate utterances from
@@ -30,7 +30,10 @@ var result = utterances(template, slots, dictionary);
 
 **dictionary** a hash of lookup values to expand
 
+**exhaustiveUtterances** if true, builds a full cartesian product of all shortcut values and slot sample values; if false, builds a smaller list of utterances that has the full cartesian product of all shortcut values, with slot sample values filled in; default = false
+
 **result** an array of strings built from the template
+
 
 
 #### example
