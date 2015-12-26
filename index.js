@@ -14,6 +14,12 @@ function expandNumberRange(start, end, by) {
   return converted;
 }
 
+// Determine if a curly brace expression is a Slot name literal
+// Returns true if expression is of the form {-|Name}, false otherwise
+function isSlotLiteral(braceExpression) {
+  return braceExpression.substring(0, 3) == "{-|";
+}
+
 // Recognize shortcuts in utterance definitions and swap them out with the actual values
 function expandShortcuts(str, slots, dictionary) {
   // If the string is found in the dictionary, just provide the matching values
@@ -90,6 +96,11 @@ function generateUtterances(str, slots, dictionary, exhaustiveUtterances) {
   var placeholders=[], utterances=[], slotmap={}, slotValues=[];
   // First extract sample placeholders values from the string
   str = str.replace(/\{([^\}]+)\}/g, function(match,p1) {
+
+    if (isSlotLiteral(match)) {
+      return match;
+    }
+
     var expandedValues=[], slot, values = p1.split("|");
     // If the last of the values is a SLOT name, we need to keep the name in the utterances
     if (values && values.length && values.length>1 && slots && typeof slots[values[values.length-1]]!="undefined") {
@@ -134,14 +145,20 @@ function generateUtterances(str, slots, dictionary, exhaustiveUtterances) {
       });
       // Replace slot placeholders
       utterance = utterance.replace(/\{(.*?)\}/g,function(match,p1){ 
-        return "{"+values[slotmap[p1]]+"|"+p1+"}";
+        return (isSlotLiteral(match)) ? match : "{"+values[slotmap[p1]]+"|"+p1+"}";
       });
       utterances.push( utterance );
     });
   }
   else {
-    return [str];
+    utterances = [str];
   }
+
+  // Convert all {-|Name} to {Name} to accomodate slot literals
+  for (var idx in utterances) {
+    utterances[idx] = utterances[idx].replace(/\{\-\|/g, "{");
+  }
+
   return utterances;
 }
 
