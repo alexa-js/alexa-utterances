@@ -89,7 +89,7 @@ function expandSlotValues (variations, slotSampleValues) {
 function generateUtterances(str, slots, dictionary, exhaustiveUtterances) {
   var placeholders=[], utterances=[], slotmap={}, slotValues=[];
   // First extract sample placeholders values from the string
-  str = str.replace(/\{([^\}]+)\}/g, function(match,p1) {
+  str = str.replace(/\(([^\)]+)\)/g, function(match,p1) {
     var expandedValues=[], slot, values = p1.split("|");
     // If the last of the values is a SLOT name, we need to keep the name in the utterances
     if (values && values.length && values.length>1 && slots && typeof slots[values[values.length-1]]!="undefined") {
@@ -115,7 +115,7 @@ function generateUtterances(str, slots, dictionary, exhaustiveUtterances) {
       placeholders.push( expandedValues );
     }
 
-    return "{"+(slot || placeholders.length-1)+"}";
+    return "<"+(slot || placeholders.length-1)+">";
   });
   // Generate all possible combinations using the cartesian product
   if (placeholders.length>0) {
@@ -129,11 +129,11 @@ function generateUtterances(str, slots, dictionary, exhaustiveUtterances) {
     // Substitute each combination back into the original string
     variations.forEach(function(values) {
       // Replace numeric placeholders
-      var utterance = str.replace(/\{(\d+)\}/g,function(match,p1){ 
+      var utterance = str.replace(/<(\d+)>/g,function(match,p1){
         return values[p1]; 
       });
       // Replace slot placeholders
-      utterance = utterance.replace(/\{(.*?)\}/g,function(match,p1){ 
+      utterance = utterance.replace(/<(.*?)>/g,function(match,p1){
         return "{"+values[slotmap[p1]]+"|"+p1+"}";
       });
       utterances.push( utterance );
@@ -145,5 +145,5 @@ function generateUtterances(str, slots, dictionary, exhaustiveUtterances) {
   return utterances;
 }
 
-
+module.change_code = 1;
 module.exports = generateUtterances;
