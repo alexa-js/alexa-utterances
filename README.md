@@ -51,7 +51,7 @@ var result = utterances(template, slots, dictionary);
 
 #### slots
 
-The slots object is a simple Name:Type mapping. The type must be one of Amazon's supported slot types: LITERAL, NUMBER, DATE, TIME, DURATION
+The slots object is a simple Name:Type mapping. The type must be one of Amazon's supported slot types: LITERAL, NUMBER, DATE, TIME, DURATION. You can use custom slot types, but you cannot integrate them with the slots object here and must instead do so with an [alternate syntax](#custom-slot-types).
 
 
 #### Using a Dictionary
@@ -116,4 +116,17 @@ Number ranges can also increment in steps
 =>
 "what is your color"
 "what is your favorite color"
+```
+
+#### Custom Slot Types <a name="custom-slot-types"></a>
+
+You may want to work with [Custom Slot Types](https://developer.amazon.com/appsandservices/solutions/alexa/alexa-skills-kit/docs/defining-the-voice-interface#The Speech Input Data) registered in your interaction model. You can use a special syntax to leave a curly-braced slot name unparsed. For example, if you have defined in your skill a `FRUIT_TYPE` with the values `Apple`, `Orange` and `Lemon` for the slot `Fruit`, you can keep `Fruit` a curly-braced literal as follows
+
+```javascript
+"{my|your} {favorite|least favorite} snack is {-|Fruit}"
+=>
+"my favorite snack is {Fruit}"
+"your favorite snack is {Fruit}"
+"my least favorite snack is {Fruit}"
+"your least favorite snack is {Fruit}"
 ```

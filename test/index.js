@@ -108,3 +108,18 @@ test('exhaustive vs non-exhaustive expansion', function (t) {
   ]);
   t.end();
 });
+
+test('raw curly braces for custom slot types', function (t) {
+  var dictionary = {};
+  var slots = {"Artist": "CUSTOM_TYPE"};
+  var template = "{my|your} {favorite|least favorite} fruit is {-|Fruit}";
+
+  var result = utterances(template, slots, dictionary);
+  t.deepEqual(result, [
+    "my favorite fruit is {Fruit}",
+    "your favorite fruit is {Fruit}",
+    "my least favorite fruit is {Fruit}",
+    "your least favorite fruit is {Fruit}"
+  ]);
+  t.end();
+});
