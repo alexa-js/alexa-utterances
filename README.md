@@ -9,28 +9,22 @@ Manually generating these combinations is tedious. This module allows you to gen
 ### Usage
 
 installation:
-```
+```bash
 npm install alexa-utterances
 ```
 
 running tests:
-```
+```bash
 npm test
 ```
 
 ### API
 
 ```javascript
-var result = utterances(template, slots, dictionary, exhaustiveUtterances);
+var result = utterances(template);
 ```
 
 **template** a string to generate utterances from
-
-**slots** a hash of slots to fill for the given utterance
-
-**dictionary** a hash of lookup values to expand
-
-**exhaustiveUtterances** if true, builds a full cartesian product of all shortcut values and slot sample values; if false, builds a smaller list of utterances that has the full cartesian product of all shortcut values, with slot sample values filled in; default = false
 
 **result** an array of strings built from the template
 
@@ -39,11 +33,8 @@ var result = utterances(template, slots, dictionary, exhaustiveUtterances);
 In the following examples, the Alexa Skill Interactin Model is used to input the LIST_OF_MOVIES. This list will be used when the Echo interprets the utterances for the intent.
 
 ```javascript
-var dictionary = { };
-var slots = { Movie: "LIST_OF_MOVIES" };
 var template = "(The best|My favorite|A great) movie is {Movie}";
-
-var result = utterances(template, slots, dictionary);
+var result = utterances(template);
 
 // result: 
 // [ "My best movie is {Movie}", "My favorite movie is {Movie}", "A great movie is {Movie}" ]
@@ -124,26 +115,4 @@ To reference the slot name in the template, use the name enclosed in curly brace
 "your favorite snack is {Fruit}"
 "my least favorite snack is {Fruit}"
 "your least favorite snack is {Fruit}"
-```
-
-#### Using a Dictionary
-
-Several intents may use the same list of possible values, so you want to define them in one place, not in each intent schema. Use the app's dictionary.
-
-```javascript
-var dictionary = { "colors": [ "red", "green", "blue" ] };
-...
-"I like {colors|COLOR}"
-```
-
-#### Multiple Options mapped to a Slot
-
-It is [recommended to use Custom Slot Types](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/migrating-to-the-improved-built-in-and-custom-slot-types) instead of this approach when constructing utterances. Migrating to a custom slot type is recommended, as it is easier to define the sample utterances and achieve better accuracy.
-
-```javascript
-"my favorite color is {red|green|blue|NAME}"
-=>
-"my favorite color is {red|NAME}"
-"my favorite color is {green|NAME}"
-"my favorite color is {blue|NAME}"
 ```

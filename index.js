@@ -6,26 +6,17 @@ var Numbered      = require('numbered');
 // ===================================================
 // Convert a number range like 5-10 into an array of english words
 function expandNumberRange(start, end, by) {
+  var i, converted = [];
   by = by || 1; //incrementing by 0 is a bad idea
-  var converted = [];
-  for (var i=start; i<=end; i+=by) {
-    converted.push( Numbered.stringify(i).replace(/-/g,' ') );
+  
+  for (i=start; i<=end; i+=by) {
+    converted.push( Numbered.stringify(i).replace(/-/g, ' ') );
   }
   return converted;
 }
 
-// Determine if a curly brace expression is a Slot name literal
-// Returns true if expression is of the form {-|Name} or {Name}, false otherwise
-function isSlotLiteral(braceExpression) {
-  return braceExpression.substring(0, 3) === "{-|" || /^{[^|}]+}$/.test(braceExpression);
-}
-
 // Recognize shortcuts in utterance definitions and swap them out with the actual values
-function expandShortcuts(str, slots, dictionary) {
-  // If the string is found in the dictionary, just provide the matching values
-  if (typeof dictionary=="object" && typeof dictionary[str]!="undefined") {
-    return dictionary[str];
-  }
+function expandShortcuts(str) {
   // Numbered ranges, ex: 5-100 by 5
   var match = str.match(/(\d+)\s*-\s*(\d+)(\s+by\s+(\d+))?/);
   if (match) {
@@ -36,19 +27,18 @@ function expandShortcuts(str, slots, dictionary) {
 
 var slotIndexes = [];
 function expandSlotValues (variations, slotSampleValues) {
-  var i;
+  var i, slot, sampleValues, idx, newVariations, mod, xtraidx;
 
-  var slot;
   for (slot in slotSampleValues) {
 
-    var sampleValues = slotSampleValues[slot];
+    sampleValues = slotSampleValues[slot];
 
-    var idx = -1;
-    if (typeof slotIndexes[slot] !== "undefined") {
+    idx = -1;
+    if (typeof slotIndexes[slot] !== 'undefined') {
       idx = slotIndexes[slot];
     }
 
-    var newVariations = [];
+    newVariations = [];
 
     // make sure we have enough variations that we can get through the sample values
     // at least once for each alexa-app utterance...  this isn't strictly as
@@ -62,8 +52,8 @@ function expandSlotValues (variations, slotSampleValues) {
     // in the output (but still many less than we would get if we did the full
     // cartesian product).
     if (variations.length < sampleValues.length) {
-      var mod = variations.length;
-      var xtraidx = 0;
+      mod = variations.length;
+      xtraidx = 0;
       while (variations.length < sampleValues.length) {
         variations.push (variations[xtraidx]);
         xtraidx = (xtraidx + 1) % mod;
@@ -73,7 +63,7 @@ function expandSlotValues (variations, slotSampleValues) {
     variations.forEach (function (variation, j) {
       var newVariation = [];
       variation.forEach (function (value, k) {
-        if (value == "slot-" + slot) {
+        if (value == 'slot-' + slot) {
           idx = (idx + 1) % sampleValues.length;
           slotIndexes[slot] = idx;
 
@@ -92,85 +82,42 @@ function expandSlotValues (variations, slotSampleValues) {
 }
 
 // Generate a list of utterances from a template
-function generateUtterances(str, slots, dictionary, exhaustiveUtterances) {
+module.exports = function generateUtterances(str) {
   var placeholders=[], utterances=[], slotmap={}, slotValues=[];
+
   // First extract sample placeholders values from the string
-  // can use parens or curly braces
-  str = str.replace(/(\(([^)]+)\)|(\{([^\}]+)\}))/g, function(match,p1,p2,p3,p4) {
-    if (isSlotLiteral(match)) {
-      return match;
-    }
+  str = str.replace(/\(([^\)]+)\)/g, function(match, p1) {
+    var expandedValues=[], values = p1.split('|');
 
-    var expandedValues=[], slot, values = (p2 || p4).split("|");
-    // If the last of the values is a SLOT name, we need to keep the name in the utterances
-    if (values && values.length && values.length>1 && slots && typeof slots[values[values.length-1]]!="undefined") {
-      slot = values.pop();
-    }
-    // // Deprecate usage of curly braces for grouping in alternation
-    // if (p3 && p3.substring(0, 1) === "{" && !slot) {
-    //   console.log("DEPRECATED: usage of curly braces", p3, "for grouping in alternation")
-    // }
-
-    values.forEach(function(val,i) {
-      Array.prototype.push.apply(expandedValues,expandShortcuts(val,slots,dictionary));
+    values.forEach(function(val, i) {
+      Array.prototype.push.apply(expandedValues, expandShortcuts(val));
     });
-    if (slot) {
-      slotmap[slot] = placeholders.length;
-    }
-
-    // if we're dealing with minimal utterances, we will delay the expansion of the
-    // values for the slots; all the non-slot expansions need to be fully expanded
-    // in the cartesian product
-    if (!exhaustiveUtterances && slot)
-    {
-      placeholders.push( [ "slot-" + slot ] );
-      slotValues[slot] = expandedValues;
-    }
-    else
-    {
-      placeholders.push( expandedValues );
-    }
-
-    // Delimit with unprintable/unused character for easier finding later
-    return "\277"+(slot || placeholders.length-1)+"\277";
+    
+    placeholders.push(expandedValues);
+    return '(' + (placeholders.length - 1) + ')';
   });
-  // Generate all possible combinations using the cartesian product
-  if (placeholders.length>0) {
-    var variations = Combinatorics.cartesianProduct.apply(Combinatorics,placeholders).toArray();
 
-    if (!exhaustiveUtterances)
-    {
-      variations = expandSlotValues (variations, slotValues);
-    }
+  // Generate all possible combinations using the cartesian product
+  if (placeholders.length > 0) {
+    var variations = Combinatorics.cartesianProduct.apply(Combinatorics, placeholders).toArray();
+
+    variations = expandSlotValues(variations, slotValues);
 
     // Substitute each combination back into the original string
     variations.forEach(function(values) {
-      // Replace numeric placeholders, found using delimited (\277) indexes
-      var utterance = str.replace(/\277(\d+)\277/g,function(match,p1){
-        return values[p1];
+      // Replace numeric placeholders
+      var utterance = str.replace(/\((\d+)\)/g, function(match, p1) { 
+        return values[p1]; 
       });
-      // Replace slot placeholders, found using delimited (\277 or curly braces) indexes
-      utterance = utterance.replace(/[{\277](.*?)[}\277]/g, function(match,p1) {
-        return (isSlotLiteral(match)) ? toLiteral(match) : "{"+values[slotmap[p1]]+"|"+p1+"}";
+      // Replace slot placeholders
+      utterance = utterance.replace(/\((.*?)\)/g, function(match, p1) { 
+        return '{' + p1 + '}';
       });
-      utterances.push( utterance );
+      utterances.push(utterance);
     });
   }
   else {
-    utterances = [str];
+    return [ str ];
   }
-
   return utterances;
 }
-
-// turn slot name into a curly brace wrapped value suitable for ASK consumption
-function toLiteral(slotName) {
-  if (slotName.substring(0, 3) == "{-|") {
-    slotName = slotName.slice(3, -1);
-  } else {
-    slotName = slotName.replace(/\277/g, "").replace(/^{|}$/g, "");
-  }
-  return "{" + slotName + "}";
-}
-
-module.exports = generateUtterances;
