@@ -75,6 +75,35 @@ test('dictionary expansion with parens (no slots)', function (t) {
 });
 
 
+test('simple number range expansion', function (t) {
+  var dictionary = {};
+  var slots = { };
+  var template = 'set brightness to (1-3)';
+
+  var result = utterances(template, slots, dictionary);
+  t.deepEqual(result, [ "set brightness to one",
+    "set brightness to two",
+    "set brightness to three"
+  ]);
+  t.end();
+});
+
+test('simple number range expansion using by', function (t) {
+  var dictionary = {};
+  var slots = { };
+  var template = "buy (5-20 by 5) items";
+
+  var result = utterances(template, slots, dictionary);
+  t.deepEqual(result, [
+    "buy five items",
+    "buy ten items",
+    "buy fifteen items",
+    "buy twenty items"
+  ]);
+  t.end();
+});
+
+
 test('number range expansion', function (t) {
   var dictionary = {};
   var slots = { Brightness: 'NUMBER' };
