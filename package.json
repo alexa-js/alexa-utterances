@@ -1,6 +1,6 @@
 {
   "name": "alexa-utterances",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "generate expanded Amazon Alexa utterances from a template string",
   "main": "index.js",
   "scripts": {
