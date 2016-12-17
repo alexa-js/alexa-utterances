@@ -1,5 +1,7 @@
 # alexa-utterances
 
+[![build Status](https://travis-ci.org/mreinstein/alexa-utterances.svg?branch=master)](https://travis-ci.org/mreinstein/alexa-utterances)
+
 generate expanded Amazon Alexa utterances from a template string
 
 When building apps for Alexa or Echo, it's important to declare many permutations of text, in order to improve the voice recognition rate.
