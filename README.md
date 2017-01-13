@@ -1,5 +1,6 @@
 # alexa-utterances
 
+[![NPM](https://img.shields.io/npm/v/alexa-utterances.svg)](https://www.npmjs.com/package/alexa-utterances/)
 [![build Status](https://travis-ci.org/alexa-js/alexa-utterances.svg?branch=master)](https://travis-ci.org/alexa-js/alexa-utterances)
 
 Generate expanded Amazon Alexa utterances from a template string.
