@@ -2,13 +2,13 @@
 
 [![build Status](https://travis-ci.org/alexa-js/alexa-utterances.svg?branch=master)](https://travis-ci.org/alexa-js/alexa-utterances)
 
-generate expanded Amazon Alexa utterances from a template string
+Generate expanded Amazon Alexa utterances from a template string.
 
 When building apps for Alexa or Echo, it's important to declare many permutations of text, in order to improve the voice recognition rate.
 
 Manually generating these combinations is tedious. This module allows you to generate many (hundreds or even thousands) of sample utterances using just a few samples that get auto-expanded. Any number of sample utterances may be passed in the utterances array. Below are some sample utterances macros and what they will be expanded to.
 
-### usage
+### Usage
 
 installation:
 ```
@@ -132,3 +132,7 @@ You may want to work with [Custom Slot Types](https://developer.amazon.com/appsa
 "my least favorite snack is {Fruit}"
 "your least favorite snack is {Fruit}"
 ```
+
+### Copyright and License
+
+Copyright (c) 2015-2017 Mike Reinstein, MIT License, see [LICENSE](LICENSE).
