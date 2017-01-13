@@ -1,6 +1,6 @@
 # alexa-utterances
 
-[![build Status](https://travis-ci.org/mreinstein/alexa-utterances.svg?branch=master)](https://travis-ci.org/mreinstein/alexa-utterances)
+[![build Status](https://travis-ci.org/alexa-js/alexa-utterances.svg?branch=master)](https://travis-ci.org/alexa-js/alexa-utterances)
 
 generate expanded Amazon Alexa utterances from a template string
 
@@ -47,7 +47,7 @@ var template = '{adjustments|Adjustment} the light';
 
 var result = utterances(template, slots, dictionary);
 
-// result: 
+// result:
 // [ '{dim|Adjustment} the light', '{brighten|Adjustment} the light' ]
 ```
 
