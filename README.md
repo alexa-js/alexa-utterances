@@ -134,6 +134,11 @@ You may want to work with [Custom Slot Types](https://developer.amazon.com/appsa
 "your least favorite snack is {Fruit}"
 ```
 
+### Contributing
+
+See [CONTRIBUTING](CONTRIBUTING.md)
+
 ### Copyright and License
 
 Copyright (c) 2015-2017 Mike Reinstein, MIT License, see [LICENSE](LICENSE).
+
