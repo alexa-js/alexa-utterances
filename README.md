@@ -123,7 +123,7 @@ Number ranges can also increment in steps
 
 #### Custom Slot Types <a name="custom-slot-types"></a>
 
-You may want to work with [Custom Slot Types](https://developer.amazon.com/appsandservices/solutions/alexa/alexa-skills-kit/docs/defining-the-voice-interface#The Speech Input Data) registered in your interaction model. You can use a special syntax to leave a curly-braced slot name unparsed. For example, if you have defined in your skill a `FRUIT_TYPE` with the values `Apple`, `Orange` and `Lemon` for the slot `Fruit`, you can keep `Fruit` a curly-braced literal as follows
+You may want to work with [Custom Slot Types](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/defining-the-voice-interface#custom-slot-types) registered in your interaction model. You can use a special syntax to leave a curly-braced slot name unparsed. For example, if you have defined in your skill a `FRUIT_TYPE` with the values `Apple`, `Orange` and `Lemon` for the slot `Fruit`, you can keep `Fruit` a curly-braced literal as follows
 
 ```javascript
 "{my|your} {favorite|least favorite} snack is {-|Fruit}"
